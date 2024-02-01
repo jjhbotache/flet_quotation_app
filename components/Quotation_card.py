@@ -24,7 +24,7 @@ class Quotation_card(UserControl):
               Text(f"#{self.products_amount} products",color=colors.GREY_700),
 
               Container(
-                Column([Text(f"$ {self.quotation.price}.000"),
+                Column([Text(f"$ {self.quotation.price}"),
                 ],horizontal_alignment=CrossAxisAlignment.END),
                 width=float('inf'),
               )
