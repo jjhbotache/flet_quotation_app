@@ -11,4 +11,3 @@ def main(page = ft.Page):
   page.add(Courtines_quotator())
 
 ft.app(main)
-

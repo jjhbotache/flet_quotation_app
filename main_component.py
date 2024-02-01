@@ -1,17 +1,7 @@
 import flet as ft
 from components.Quotation_card import Quotation_card
 from classes.Quotation_card_class import Quotation_card_class
-from flet import (
-  UserControl,
-  SafeArea,
-  TextField,
-  Container,
-  PopupMenuButton,
-  PopupMenuItem,
-  ResponsiveRow,
-  Column,
-  Text,
-)
+from flet import *
 
 class Courtines_quotator(UserControl):
 
@@ -28,14 +18,13 @@ class Courtines_quotator(UserControl):
       Quotation_card_class('Producto I', 230),
       Quotation_card_class('Producto J', 240)
     ]
-    return ResponsiveRow([
-      Column([
-        Quotation_card(qc) for qc in quotation_cards
-      ],col=12)
-    ])
+    return Container(
+      Column(
+        [Quotation_card(quotation) for quotation in quotation_cards],
+      ),
+    )
   
 class Nav(UserControl):
-
   def build(self):
     return SafeArea(
       ResponsiveRow([
