@@ -2,43 +2,32 @@ import flet as ft
 from components.Quotation_card import Quotation_card
 from classes.Quotation_card_class import Quotation_card_class
 from flet import *
+import random,os
+from data.quotations_provider import get_quotations
 
 class Courtines_quotator(UserControl):
   def __init__(self,page):
     super().__init__()
     self.page = page
-
   
-  def change_route(self,e):
-    self.page.go("/details")
-    self.page.update()
-
   def build(self):
-    quotation_cards = [
-      Quotation_card_class('Producto A', 150),
-      Quotation_card_class('Producto B', 200),
-      Quotation_card_class('Producto C', 180),
-      Quotation_card_class('Producto D', 220),
-      Quotation_card_class('Producto E', 170),
-      Quotation_card_class('Producto F', 190),
-      Quotation_card_class('Producto G', 210),
-      Quotation_card_class('Producto H', 160),
-      Quotation_card_class('Producto I', 230),
-      Quotation_card_class('Producto J', 240)
-    ]
+    quotation_cards = get_quotations()
+
     return Container(
       Column(
         [
-          ElevatedButton("change route",on_click=self.change_route),
-          *[Quotation_card(quotation) for quotation in quotation_cards],
+          *[Quotation_card(self.page,quotation_obj) for quotation_obj in quotation_cards],
         ],
       ),
     )
   
 class Details(UserControl):
-  def __init__(self,page):
+  def __init__(self,page,details_id):
     super().__init__()
     self.page = page
+    self.quotation = list(filter(lambda q: q.quotation_id == details_id,get_quotations()))[0]
+    print(self.quotation)
+
 
   def change_route(self,e):
     print('change route from details')
@@ -49,10 +38,14 @@ class Details(UserControl):
     return Container(
       Column(
         [
-          Text("Details"),
+          Text(f"{self.quotation.name}",color=colors.GREY_100,size=40),
           ElevatedButton("change route",on_click=self.change_route),
         ],
+        horizontal_alignment=CrossAxisAlignment.CENTER,
       ),
+      width=float('inf'),
+      height=self.page.height,
+      bgcolor=colors.GREY_900,
     )
   
 
