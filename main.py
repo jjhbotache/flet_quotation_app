@@ -9,9 +9,8 @@ def main(page = Page):
 
   
 
-  def on_change_route(e):
-    print(e)
-    print('route change attempt')
+  def on_change_route(route):
+    print(route)
     troute = TemplateRoute(page.route)
 
     page.views.clear()

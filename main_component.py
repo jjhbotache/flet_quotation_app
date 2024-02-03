@@ -12,11 +12,12 @@ class Courtines_quotator(UserControl):
   
   def build(self):
     quotation_cards = get_quotations()
+    quotations_to_render = quotation_cards
 
     return Container(
       Column(
         [
-          *[Quotation_card(self.page,quotation_obj) for quotation_obj in quotation_cards],
+          *[Quotation_card(self.page,quotation_obj) for quotation_obj in quotations_to_render],
         ],
       ),
     )
@@ -26,20 +27,14 @@ class Details(UserControl):
     super().__init__()
     self.page = page
     self.quotation = list(filter(lambda q: q.quotation_id == details_id,get_quotations()))[0]
-    print(self.quotation)
 
-
-  def change_route(self,e):
-    print('change route from details')
-    self.page.go("/")
-    self.page.update()
 
   def build(self):
     return Container(
       Column(
         [
           Text(f"{self.quotation.name}",color=colors.GREY_100,size=40),
-          ElevatedButton("change route",on_click=self.change_route),
+          ElevatedButton("change route",on_click=lambda _: self.page.go("/")),
         ],
         horizontal_alignment=CrossAxisAlignment.CENTER,
       ),
@@ -47,8 +42,6 @@ class Details(UserControl):
       height=self.page.height,
       bgcolor=colors.GREY_900,
     )
-  
-
 
 def Nav(page):
   return AppBar(title=SafeArea(

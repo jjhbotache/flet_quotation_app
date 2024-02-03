@@ -11,12 +11,7 @@ class Quotation_card(UserControl):
     self.products_amount = random.randint(2,10)
     self.page = page
 
-  def change_route(self,quotation_id:int):
-    self.page.go(f"/details/{quotation_id}")
-    self.page.update()
-    
   def build(self):
-    
     return Card(
         Container(
           ResponsiveRow([
@@ -34,7 +29,7 @@ class Quotation_card(UserControl):
             ],col=12,spacing=0),
           ]),
           padding=12,
-          on_click=lambda e: self.change_route(self.quotation.quotation_id),
+          on_click=lambda _: self.page.go(f"/details/{self.quotation.quotation_id}"),
         ),
         elevation=2,
         width=float('inf'),
