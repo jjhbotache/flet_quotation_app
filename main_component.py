@@ -1,6 +1,6 @@
 import flet as ft
-from components.Quotation_card import Quotation_card
-from classes.Quotation_card_class import Quotation_card_class
+from components.quotation_card import Quotation_card
+from classes.quotation_card_class import Quotation_card_class
 from flet import *
 import random,os
 from data.quotations_provider import get_quotations

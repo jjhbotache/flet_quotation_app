@@ -1,4 +1,4 @@
-from classes.Quotation_card_class import Quotation_card_class
+from classes.quotation_card_class import Quotation_card_class
 import random
 def get_quotations():
     letters = ['A','B','C','D','E','F','G','H','I','J']

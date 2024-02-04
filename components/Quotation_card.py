@@ -1,6 +1,6 @@
 from flet import *
 import flet as ft
-from classes.Quotation_card_class import Quotation_card_class
+from classes.quotation_card_class import Quotation_card_class
 import random
 from functions.string_functions  import put_points
 

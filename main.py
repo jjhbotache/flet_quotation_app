@@ -1,7 +1,8 @@
 # make a simple flet app
 import flet as ft
-from main_component import *
 from flet import *
+from pages.courtines_quotator import Courtines_quotator
+from pages.details import Details
 
 
 
@@ -14,12 +15,11 @@ def main(page = Page):
     troute = TemplateRoute(page.route)
 
     page.views.clear()
-    page.views.append(View("/",[Courtines_quotator(page)],appbar=Nav(page),scroll=ScrollMode.ADAPTIVE))
-
+    page.views.append(View("/",[Courtines_quotator(page)]))
     # for each route in routes, check if the route is the same as the current route
     # if it is, then add the view to the page views
     if troute.match("/details/:details_id"):
-      page.views.append(View("/details/:details_id",[Details(page,int(troute.details_id))],appbar=Nav(page)))
+      page.views.append(View("/details/:details_id",[Details(page,int(troute.details_id))]))
 
   def view_pop(view):
         page.views.pop()
@@ -28,9 +28,9 @@ def main(page = Page):
 
   page.on_route_change = on_change_route
   page.on_view_pop = view_pop 
-
-  
-
+  page.padding = 0
+  page.margin = 0
   page.go("/")
+
 
 ft.app(main)
