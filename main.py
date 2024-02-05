@@ -3,6 +3,7 @@ import flet as ft
 from flet import *
 from pages.courtines_quotator import Courtines_quotator
 from pages.details import Details
+from pages.new_quotation import New_quotation
 
 
 
@@ -18,7 +19,9 @@ def main(page = Page):
     page.views.append(View("/",[Courtines_quotator(page)]))
     # for each route in routes, check if the route is the same as the current route
     # if it is, then add the view to the page views
-    if troute.match("/details/:details_id"):
+    if troute.match("/details/new"):
+      page.views.append(View("/details/new",[New_quotation(page)]))
+    elif troute.match("/details/:details_id"):
       page.views.append(View("/details/:details_id",[Details(page,int(troute.details_id))]))
 
   def view_pop(view):
