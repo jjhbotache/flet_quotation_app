@@ -1,11 +1,11 @@
 from flet import *
 import flet as ft
-from classes.quotation_card_class import Quotation_card_class
+from classes.quotation_class import Quotation_class
 import random
 from functions.string_functions  import put_points
 
 class Quotation_card(UserControl):
-  def __init__(self,page,quotation:Quotation_card_class):
+  def __init__(self,page,quotation:Quotation_class):
     super().__init__()
     self.quotation = quotation
     self.products_amount = random.randint(2,10)
