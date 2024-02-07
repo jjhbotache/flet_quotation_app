@@ -3,7 +3,7 @@ class Product_quotation_class():
       self,
       id_product_quotation=0,
       id_product=0,
-      amount=0):
+      amount:float=0):
     self.id_product_quotation = id_product_quotation
     self.id_product = id_product
     self.amount = amount
