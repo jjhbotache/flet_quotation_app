@@ -25,10 +25,10 @@ def main(page = Page):
       page.views.append(View("/products",[Products_manager(page)]))
     elif troute.match("/products/new"):
       page.views.append(View("/products",[Products_manager(page)]))
-      page.views.append(View("/products/new",[Text("New product")]))
+      page.views.append(View("/products/new",[Products_manager(page, new=True)]))
     elif troute.match("/products/edit/:product_id"):
       page.views.append(View("/products",[Products_manager(page)]))
-      page.views.append(View("/products/edit/:product_id",[Text("edit product")]))
+      page.views.append(View("/products/edit/:product_id",[Products_manager(page, product_id=int(troute.product_id))]))
 
   def view_pop(view):
         page.views.pop()
@@ -39,7 +39,7 @@ def main(page = Page):
   page.on_view_pop = view_pop 
   page.padding = 0
   page.margin = 0
-  page.go("/products")
+  page.go("/")
 
 
 ft.app(main)
