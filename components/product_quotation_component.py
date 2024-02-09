@@ -7,7 +7,11 @@ class Product_quotation_component(UserControl):
     self.id_product = id_product
     self.amount = amount
     self.products = get_products()
+    self.current_product = None
     self.amount_component_ref = Ref[TextField]()
+
+    if self.id_product != None:
+      self.current_product = list(filter(lambda p: p.id_product == self.id_product,self.products))[0]
 
     # print([p.name for p in self.products],sep="\n")
 
@@ -16,7 +20,6 @@ class Product_quotation_component(UserControl):
     product = list(filter(lambda p: p.name == e.control.value,self.products))[0]
     self.id_product = product.id_product
     amount_field.label = product.unit
-    print(product.unit)
     amount_field.update()
 
   def amount_changed(self,add_or_remove=0):
@@ -43,15 +46,16 @@ class Product_quotation_component(UserControl):
     )
 
   def build(self):
+    print(self.current_product)
     return ResponsiveRow(
             [
               Dropdown(
-                hint_text="Select a product",
+                hint_text= self.current_product.name if self.current_product != None else "Select a product",
                 options=[dropdown.Option(p.name) for p in self.products],
                 col=7,
                 on_change=self.product_changed,
               ),
-              TextField(ref=self.amount_component_ref,col=3,keyboard_type=KeyboardType.NUMBER,value=self.amount,on_change=lambda e: self.amount_changed()),
+              TextField(ref=self.amount_component_ref,col=3,keyboard_type=KeyboardType.NUMBER,value=self.amount,on_change=lambda e: self.amount_changed(),label=self.current_product.unit if self.current_product != None else "??"),
               Column([
                 IconButton(on_click=lambda e: self.amount_changed(1),style=ButtonStyle(padding=padding.all(0)),icon_size=15,icon=icons.ADD),
                 IconButton(on_click=lambda e: self.amount_changed(-1),style=ButtonStyle(padding=padding.all(0)),icon_size=15,icon=icons.REMOVE)

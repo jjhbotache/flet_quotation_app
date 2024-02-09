@@ -11,3 +11,5 @@ class Product():
     self.unit = unit
     self.price = price
 
+  def __str__(self):
+    return f'{self.id_product}) Product({self.name},{self.unit},{self.price})'

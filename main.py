@@ -3,6 +3,7 @@ import flet as ft
 from flet import *
 from pages.courtines_quotator import Courtines_quotator
 from pages.quotation_editor import Quotation_editor
+from pages.products_manager import Products_manager
 
 
 
@@ -16,10 +17,18 @@ def main(page = Page):
     page.views.append(View("/",[Courtines_quotator(page)]))
     # for each route in routes, check if the route is the same as the current route
     # if it is, then add the view to the page views
-    if troute.match("/details/new"):
+    if troute.match("/details/new"): 
       page.views.append(View("/details/new",[Quotation_editor(page)]))
     elif troute.match("/details/:details_id"):
       page.views.append(View("/details/:details_id",[Quotation_editor(page,int(troute.details_id))]))
+    elif troute.match("/products"):
+      page.views.append(View("/products",[Products_manager(page)]))
+    elif troute.match("/products/new"):
+      page.views.append(View("/products",[Products_manager(page)]))
+      page.views.append(View("/products/new",[Text("New product")]))
+    elif troute.match("/products/edit/:product_id"):
+      page.views.append(View("/products",[Products_manager(page)]))
+      page.views.append(View("/products/edit/:product_id",[Text("edit product")]))
 
   def view_pop(view):
         page.views.pop()
@@ -30,7 +39,8 @@ def main(page = Page):
   page.on_view_pop = view_pop 
   page.padding = 0
   page.margin = 0
-  page.go("/")
+  page.go("/products")
 
 
 ft.app(main)
+# 1080*2400 dimensions

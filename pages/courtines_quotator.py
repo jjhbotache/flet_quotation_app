@@ -2,6 +2,7 @@ from flet import *
 from data.quotations_provider import get_quotations
 from components.quotation_card import Quotation_card  
 from components.menu import Menu
+from constants.style_cosntants import bottom_padding
 
 class Courtines_quotator(UserControl):
   def __init__(self,page):
@@ -55,8 +56,11 @@ class Courtines_quotator(UserControl):
               ],
               height=total_height,
             ),
-            FloatingActionButton(icon=icons.ADD,bottom=20,right=20,on_click=lambda _: self.page.go("/details/new"))
-            ]),
-            expand=True
+            FloatingActionButton(icon=icons.ADD,bottom=20,right=20,on_click=lambda _: self.page.go("/details/new")),
+            ],
+            height=total_height-bottom_padding,
+            ),
+            expand=True,
+            maintain_bottom_view_padding=True,
           )
   

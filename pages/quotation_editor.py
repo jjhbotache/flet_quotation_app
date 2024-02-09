@@ -4,9 +4,10 @@ from components.product_quotation_component import Product_quotation_component
 from classes.product_quotation_class import Product_quotation_class
 from data.products_provider import get_products
 from functions.string_functions import put_points
+from constants.style_cosntants import bottom_padding
 import random,time
 
-class Quotation_editor(UserControl):
+class   Quotation_editor(UserControl):
   def __init__(self,page,quotation_id=None):
     super().__init__()
     self.page = page
@@ -14,10 +15,28 @@ class Quotation_editor(UserControl):
     self.products_quotations = Ref[Column]()
     self.main_column_ref = Ref[Column]()
 
+    self.products_quotations_components = []
+
+
     self.quotation_name = ""
     self.quotation_price = 0
     self.list_of_product_quotation_ids = set()
     self.products = get_products()
+
+    
+    print(self.quotation_id,f"quotation_id")
+    print(self.quotation_id != None,f"quotation_id != None")
+    if self.quotation_id != None:
+      # bring the quotation 
+      quotations = get_quotations()
+      # get the quotation by id
+      self.quotation = next((quotation for quotation in quotations if quotation.quotation_id == self.quotation_id),None)
+      self.quotation_name = self.quotation.name
+      self.quotation_price = self.quotation.price
+
+      self.products_quotations_components = [
+          Product_quotation_component(pq.id_product,pq.amount) for pq in self.quotation.products_quotations
+      ]
 
   def add_product_quotation(self,e):
     product_quotations_column = self.products_quotations.current
@@ -61,7 +80,7 @@ class Quotation_editor(UserControl):
     time.sleep(2)
 
     success = random.choice([True,False])
-    if success: dialog = AlertDialog(title=Text("Success"),content=Text("The quotation was saved successfully"),)
+    if success: dialog = AlertDialog(title=Text("Success"),content=Text("The quotation was saved successfully"),on_dismiss=lambda e: self.page.go("/"))
     else: dialog = AlertDialog(title=Text("Ups..."),content=Text("There was an error saving the quotation"),)
 
     self.page.dialog = dialog
@@ -73,13 +92,7 @@ class Quotation_editor(UserControl):
     self.main_column_ref.current.update()
 
   def build(self):
-    if self.quotation_id != None:
-      # bring the quotation 
-      quotations = get_quotations()
-      # get the quotation by id
-      self.quotation = next((quotation for quotation in quotations if quotation.quotation_id == self.quotation_id),None)
-      self.quotation_name = self.quotation.name
-      self.quotation_price = self.quotation.price
+
 
     return SafeArea(
       Container(
@@ -87,10 +100,15 @@ class Quotation_editor(UserControl):
         [
           TextField(value=self.quotation_name,hint_text="Quotation name"),
           Container(
-          Column([
-            
-          ],
-          ref=self.products_quotations,scroll=ScrollMode.ALWAYS,height=self.page.height-230,width=float("inf"),horizontal_alignment="center",spacing=0),
+          Column(
+          controls=self.products_quotations_components,
+          ref=self.products_quotations,
+          scroll=ScrollMode.ALWAYS,
+          height=self.page.height-280,
+          width=float("inf"),
+          horizontal_alignment="center",
+          spacing=0
+          ),
           bgcolor=colors.GREY_800,
           ),
           Text(f"Total: {put_points(self.quotation_price * 1000)}",size=20),
@@ -98,10 +116,11 @@ class Quotation_editor(UserControl):
           ElevatedButton("Save",on_click=self.save_quotation), 
         ],
         horizontal_alignment="center",
-        height=self.page.height-15,
+        height=50,
         width=float("inf"),
         ref=self.main_column_ref
       ),
-      bgcolor=colors.GREY_900
-      )
+      bgcolor=colors.GREY_900,
+      height=self.page.height-bottom_padding,
+      ),
     )
