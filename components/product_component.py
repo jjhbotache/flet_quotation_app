@@ -8,6 +8,10 @@ class Product_component(UserControl):
 
   def on_edit_product(self,product):
     self.page.go("/products/edit/"+str(product.id_product))
+  
+  def on_delete_product(self,product):
+    print("deleting product")
+    print(product)
 
   def build(self):
     return Card(
@@ -15,7 +19,7 @@ class Product_component(UserControl):
         Column([
           ResponsiveRow([
             Text(self.product.name,size=30,col=10),
-            IconButton(icon=icons.DELETE,col=2)
+            IconButton(icon=icons.DELETE,col=2, on_click=lambda _: self.on_delete_product(self.product) )
           ]),
           ResponsiveRow([
             Column([

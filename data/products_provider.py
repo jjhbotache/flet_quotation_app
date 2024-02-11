@@ -1,8 +1,8 @@
 from classes.product_class import Product
+from data.gspread_provider import get_products as get_products_gspread
 import random
 def get_products():
-    
-    return [
+    test_data = [
       Product(
         id_product=1,
         name="Sheer",
@@ -22,3 +22,17 @@ def get_products():
         price=random.randint(1000, 10000)
       ),
     ]
+
+    real_data = get_products_gspread()
+
+    real_data = [
+        Product(
+            id_product=p["id_product"],
+            name=p["name"],
+            unit=p["unit"],
+            price=p["price"]
+        )
+        for p in real_data
+    ]
+
+    return real_data

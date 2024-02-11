@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "courtines",
+  "private_key_id": "87e92b9112ed46cac2ebc7b00fcdc46db49552dd",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCx+6L1W1n7ARVu\nW0WLNaz2OfAfR4c4jnVIubvAM5WETC/tX7fg5qStiJoQYtaNUTmh3k16AaS3OJDw\n4xg010UdJ145qQx8gOfxBWSXgFe2emVtirLz7g/k9QsqPzZ39RFWeugEJQeZci53\nnZwOhfxhdHQYin1FlDtPboZb7ltUsRGSQpmR6DMK6zia4PqkGjb7/U/rofAWTS6y\n8303LoLZqb7oL/2z8/r/2V5wYsZLtH7vNN5afWvbe7YEMfzEAxgxBXYLQWc/Mwjd\nSs9IxwsQ8DGRzqOUZkRgrflswm+Gf59+btBA+08gWi7kjiID9XewE4BphISbCVEY\nqL8LU0DNAgMBAAECggEAD26stg6KMkfpRkzWrlfkm+LxLZ0jneVISRqFq4gtfi+m\n9jOW+4K0I7HU/fe797vjvePLHvmWgSZ/9ssSFb7WqMz5kBFW2lLJCa54huRjdpiN\nQ97DXoA1U5plse+SNvuCWdfFV1qomob6fXemiOHYPND+ogQcEZTlQaFpN/5mX+Tn\ncprBAQFtR2fv2Hcf0RPLQg9oXPloEiZHrYn0hdE5mhDZ4PcgSLIRzxqlmY3GUHQA\nt85t5lnCniJ9VyfGjWsQti/l1/Y6AJKUTQIgx8B2n0sIyWz1t/qc9T3A8CwyrHl9\nJmSOmXW6IRR8dhxVA2xhTw+fo3X6CPzjyEnrgNl2QQKBgQDkDM7yv169LMRWlPsJ\nccGN1X+JIOkpYd7vRL3ZXBxtbpB8wU/T0VzoVakbYep1H/F2aKNymMTWV+3zF9M/\nRfIu4WQPx4YxG2ebVWpF7Mbf+sGWzNyh0y3nWjkDrWJjVWPC1Mxw4UqaccDYWbuf\nLvUdzd+1wEwdDdeDFFvYXEy/4QKBgQDHy/JliEv0G2k1ZMDrn7OgFEiNfisuHazx\nhg7NvZLo0+NyrftuNl5JU2xOIUMBcZNzwTHb/Ne86lT0KDbtu59VPaxBWhiDTEqc\ng7xTTdgC6ZjxYYHv31gU82nYzk2mwK2BQqOoJvq4S3W/CGM7AoegqSYWV5siEAZd\nIm4c3g9ObQKBgAcD3dnZyTBIkEGZk59WwH18c8/kE0gSmqkBlFV7X+R94jP0PmBl\nsFX1TJ5rBKtVsDfUQDLmQCfXzJoNwZHQtQJ8LHfPy3D3RtigaAR+pB9/tzTMWH0h\n4eeb/uT+EGi917PGmANg6sqVdTkyiXL8Hs4r5xXQNIcwRdDib3DYZgQBAoGBAJO1\nSKAdkqGGflJ2CVZpO//13umURFIUqF3q0RjztR+iPr3yuDZzxWMKZMCiQIpZsDxc\nsQLFO62zxFi5PlqlYhc/wBCUjhjLl0F89wbTPwZwMp0JjGmNQe5DQpaBdtD4E43D\neYCASM1lJEi1576hkSmKw9iyrcMR+9Jw+N0ookJFAoGBAOOP/7zxzQG+sb1t16xL\nGINIGw1J8QGtOFJd+/KPPyhsQPusXwjDgwK1Bu52IDq8sbX0DXozEuFzUurbTU3u\n85VATIKKuxZ3lNM8CBL3Fxo1Fhpsr7PmXiJgJIGxwJRQc2h0gVUe/XbEy+LPFURB\n7dUf6jbOWl/cgsxX9Y+xXV3J\n-----END PRIVATE KEY-----\n",
+  "client_email": "courtines-quotator@courtines.iam.gserviceaccount.com",
+  "client_id": "109970956753062021043",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/courtines-quotator%40courtines.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
