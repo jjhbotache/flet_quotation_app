@@ -23,16 +23,20 @@ def get_products():
       ),
     ]
 
-    real_data = get_products_gspread()
+    try:
+      real_data = get_products_gspread()
 
-    real_data = [
-        Product(
-            id_product=p["id_product"],
-            name=p["name"],
-            unit=p["unit"],
-            price=p["price"]
-        )
-        for p in real_data
-    ]
-
-    return real_data
+      real_data = [
+          Product(
+              id_product=p["id_product"],
+              name=p["name"],
+              unit=p["unit"],
+              price=p["price"]
+          )
+          for p in real_data
+      ]
+      return real_data
+    except Exception as e:
+      print("Error in get_products")
+      print(e)
+      return test_data

@@ -1,17 +1,25 @@
 from data.products_quotations_provider import get_products_quotations
+from classes.product_class import Product
+from classes.product_quotation_class import Product_quotation_class
+from functools import reduce
 class Quotation_class():
-  def __init__(self,name:str,price:int,quotation_id:int,products_quotations:list[int] = []):
+  def __init__(self,name:str,quotation_id:int,products_objs:list[Product],product_quotations_objs:list[Product_quotation_class]):
     self.quotation_id = quotation_id
     self.name = name
 
-    products_objs = get_products_quotations()
-    # no in the db:
-    self.products_quotations = [
-      # Product_quotation_class(...)
-      pq for pq in products_objs if pq.id_product in products_quotations
+    # just get the products_quotations wich id_quotation is the same as the quotation_id
+    self.products_quotations = [ p for p in product_quotations_objs if p.id_product_quotation == self.quotation_id ]
 
-    ]
-    self.price = price # price of the whole quotation is calculated 
+
+    # price of the whole quotation is calculated 
+    # self.price = reduce(
+    #   lambda acc,pq: acc + pq.amount * list(filter(lambda p: p.id_product == pq.id_product,products_objetcs))[0].price,
+    #   self.products_quotations,
+    #   0
+    # )
+    self.price = 0
+
+
 
 
   def __str__(self):

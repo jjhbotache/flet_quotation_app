@@ -80,7 +80,7 @@ def get_quotations():
   quotations = quotations_ws.get_all_records()
   # add the id_quotation field
   quotations = [ { **quotations[i],"id_quotation":i+2 } for i in range(len(quotations))]
-  print(quotations)
+  # print(quotations)
   return quotations
 
 def get_products():
@@ -89,7 +89,8 @@ def get_products():
   products = products_ws.get_all_records()
   # add the id_product field
   products = [ { **products[i],"id_product":i+2 } for i in range(len(products))]
-  # print(products)
+  print("products gotten:")
+  print(products)
   return products
 
 def get_product_quotations():
@@ -98,7 +99,7 @@ def get_product_quotations():
   product_quotations = product_quotations_ws.get_all_records()
   # add the id_product_quotation field
   product_quotations = [ { **product_quotations[i],"id_product_quotation":i+2 } for i in range(len(product_quotations))]
-  print(product_quotations)
+  # print(product_quotations)
   return product_quotations
 
 # U
@@ -151,7 +152,7 @@ def delete_product():
 
 # create_product()
 # create_a_product_quotation()
-create_quotation()
+# create_quotation()
   
 # get_quotations()
 # get_products()
