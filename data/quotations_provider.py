@@ -20,11 +20,12 @@ def get_quotations():
         real_data = get_quotations_gspread()
         real_data  = [
             Quotation_class(
-                name=real_data[0]["name"],
-                quotation_id=real_data[0]["id_quotation"],
+                name=q["name"],
+                quotation_id=q["id_quotation"],
                 products_objs=products,
                 product_quotations_objs=products_quotations
             )
+            for q in real_data
         ]
         data_to_return = real_data
     except Exception as e:
