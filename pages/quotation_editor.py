@@ -5,6 +5,7 @@ from classes.product_quotation_class import Product_quotation_class
 from data.products_provider import get_products
 from functions.string_functions import put_points
 from constants.style_cosntants import bottom_padding
+from data.gspread_provider import delete_product_quotation
 import random,time
 
 class   Quotation_editor(UserControl):
@@ -24,8 +25,6 @@ class   Quotation_editor(UserControl):
     self.products = get_products()
 
     
-    print(self.quotation_id,f"quotation_id")
-    print(self.quotation_id != None,f"quotation_id != None")
     if self.quotation_id != None:
       # bring the quotation 
       quotations = get_quotations()
@@ -34,8 +33,14 @@ class   Quotation_editor(UserControl):
       self.quotation_name = self.quotation.name
       self.quotation_price = self.quotation.price
 
+      print(self.quotation.__dict__)
+      def delete_pq(id_product_quotation):
+        delete_product_quotation(id_product_quotation)
+        self.products_quotations.current.controls = [pq for pq in self.products_quotations.current.controls if pq.id_product_quotation != id_product_quotation]
+        self.products_quotations.current.update()
+
       self.products_quotations_components = [
-          Product_quotation_component(pq.id_product,pq.amount) for pq in self.quotation.products_quotations
+          Product_quotation_component(pq,lambda _: delete_pq(pq.id_product_quotation) ) for pq in self.quotation.products_quotations
       ]
 
   def add_product_quotation(self,e):
@@ -52,7 +57,7 @@ class   Quotation_editor(UserControl):
 
   def save_quotation(self,e):
 
-    if any([pq.id_product == None for pq in self.products_quotations.current.controls]):
+    if any([pq.id_product_quotation == None for pq in self.products_quotations.current.controls]):
       dialog = AlertDialog(
         title=Text("Ups..."),
         content=Text("You must select a product for each product quotation"),
@@ -79,7 +84,7 @@ class   Quotation_editor(UserControl):
     # simulate a delay
     time.sleep(2)
 
-    success = random.choice([True,False])
+    success = True
     if success: dialog = AlertDialog(title=Text("Success"),content=Text("The quotation was saved successfully"),on_dismiss=lambda e: self.page.go("/"))
     else: dialog = AlertDialog(title=Text("Ups..."),content=Text("There was an error saving the quotation"),)
 

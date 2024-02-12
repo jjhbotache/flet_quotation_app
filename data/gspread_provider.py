@@ -140,20 +140,20 @@ def delete_product(id_product:int,product_quotations=get_product_quotations(),qu
   # delete the product_quotations where the id_product is the same
   product_quotations_to_delete = list(filter(lambda pq: pq["id_product"]==id_product,product_quotations))
   for pq in product_quotations_to_delete:
-    delete_product_quotation(pq["id_product_quotation"],quotation_product_quotations)
+    delete_product_quotation(pq["id_product_quotation"],quotation_product_quotations=quotation_product_quotations)
 
 def delete_product_quotation(id_product_quotation:int,quotation_product_quotations=[]):
   delete_register_by_id(id_product_quotation,"product_quotation")
   quotations_to_delete = list(filter(lambda qpq: qpq["id_product_quotation"]==id_product_quotation , quotation_product_quotations))
   for q in quotations_to_delete:
-    delete_quotation(q["id_quotation"])
+    if len(quotation_product_quotations)==0: delete_quotation(q["id_quotation"])
     delete_register_by_id(q["id_quotation_product_quotation"],"quotation_product_quotation")
 
 def delete_quotation(id_quotation_to_del:int,quotation_product_quotations=[]):
   delete_register_by_id(id_quotation_to_del,"quotation")
   quotation_product_quotations_to_delete = list(filter(lambda qpq: qpq["id_quotation"]==id_quotation_to_del , quotation_product_quotations))
   for qpq in quotation_product_quotations_to_delete:
-    delete_product_quotation(qpq["id_product_quotation"])
+    if len(quotation_product_quotations)==0: delete_product_quotation(qpq["id_product_quotation"])
     delete_register_by_id(qpq["id_quotation_product_quotation"],"quotation_product_quotation")
 
 
@@ -161,18 +161,31 @@ def delete_quotation(id_quotation_to_del:int,quotation_product_quotations=[]):
 
 # create_product()
 # create_a_product_quotation()
-create_quotation()
+# create_quotation()
   
 # get_quotations()
 # get_products()
 # get_product_quotations()
   
 # update_product()
-  
-delete_quotation(
-  id_quotation_to_del=int(input("Enter the id of the quotation to delete: ")),
-  quotation_product_quotations=get_quotation_product_quotations()
-  )
+
+
+# delete_quotation(
+#   id_quotation_to_del=int(input("Enter the id of the quotation to delete: ")),
+#   quotation_product_quotations=get_quotation_product_quotations()
+#   )
+
+# delete_product(
+#   id_product=int(input("Enter the id of the product to delete: ")),
+#   product_quotations=get_product_quotations(),
+#   quotation_product_quotations=get_quotation_product_quotations()
+# )
+
+# delete_product_quotation(
+#   id_product_quotation=int(input("Enter the id of the product quotation to delete: ")),
+#   quotation_product_quotations=get_quotation_product_quotations()
+# )
+
 
 
 

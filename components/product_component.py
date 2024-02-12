@@ -1,5 +1,6 @@
 from flet import *
 from classes.product_class import Product
+from data.gspread_provider import delete_product
 
 class Product_component(UserControl):
   def __init__(self, product):
@@ -11,7 +12,8 @@ class Product_component(UserControl):
   
   def on_delete_product(self,product):
     print("deleting product")
-    print(product)
+    delete_product(product.id_product)
+
 
   def build(self):
     return Card(
