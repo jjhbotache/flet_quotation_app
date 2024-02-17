@@ -3,18 +3,18 @@ from data.products_provider import get_products
 from classes.product_quotation_class import Product_quotation_class
 class Product_quotation_component(UserControl):
   # def __init__(self,id_product=None,amount=1):
-  def __init__(self,product_quotation=None,on_delete_product_quotation=None):
+  def __init__(self,id_pq=None,products=get_products(),product_quotation=None,on_delete_product_quotation=None):
     super().__init__()
-    self.id_product_quotation =product_quotation.id_product if product_quotation != None else None
+    self.id_product_quotation =product_quotation.id_product if product_quotation != None else id_pq
     self.amount = product_quotation.amount if product_quotation != None else 1
     self.product_quotation = product_quotation
-    self.products = get_products()
+    self.products = products
     self.current_product = None
     self.amount_component_ref = Ref[TextField]()
 
     self.delete_product_quotation = on_delete_product_quotation
 
-    if self.id_product_quotation != None:
+    if self.id_product_quotation != None and id_pq == None:
       self.current_product = list(filter(lambda p: p.id_product == self.id_product_quotation,self.products))[0]
 
     # print([p.name for p in self.products],sep="\n")
@@ -48,8 +48,6 @@ class Product_quotation_component(UserControl):
       id_product=self.id_product_quotation,
       amount=self.amount
     )
-
-  
 
   def build(self):
     print(self.current_product)

@@ -14,9 +14,8 @@ class Quotation_class():
 
     self.products_quotations = []
     for pq_id in self.products_quotations_ids:
-      self.products_quotations.append(
-        next(pq for pq in product_quotations_objs if pq.id_product_quotation == pq_id)
-      )
+      x = [pq for pq in product_quotations_objs if pq.id_product_quotation == pq_id]
+      if len(x) > 0: self.products_quotations.append(x)
     # price of the whole quotation is calculated 
     # self.price = reduce(
     #   lambda acc,pq: acc + pq.amount * list(filter(lambda p: p.id_product == pq.id_product,products_objetcs))[0].price,

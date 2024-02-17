@@ -49,11 +49,34 @@ class   Quotation_editor(UserControl):
     # add it to the list of product quotations
     # update the view
 
+    no_id_quotations = [
+      pq.id_product_quotation for pq in product_quotations_column.controls if isinstance(pq.id_product_quotation,str)
+    ]
 
-    product_quotations_column.controls.append(
-      Product_quotation_component()
+    new_pq_ids = [int(str_id[1:]) for str_id in no_id_quotations]
+    last_id = max(new_pq_ids) if len(new_pq_ids) > 0 else 0
+
+    new_component_id = f"N{last_id + 1}"
+    print("new_component_id",new_component_id)
+    component = Product_quotation_component(
+      products=self.products,
+      on_delete_product_quotation=lambda _:self.delete_product_quotation(new_component_id),
+      id_pq=str(new_component_id)
     )
+    product_quotations_column.controls.append(component)
     product_quotations_column.update()
+
+  def delete_product_quotation(self,id_pq):
+    print("delete_product_quotation id:",id_pq)
+    print("from pq:",[pq.id_product_quotation for pq in self.products_quotations.current.controls])
+    pqcontrols = self.products_quotations.current.controls
+    new_controls = list(filter(
+      lambda pq: str(pq.id_product_quotation) != str(id_pq)
+      ,pqcontrols
+    ))
+
+    self.products_quotations.current.controls = new_controls  
+    self.update()
 
   def save_quotation(self,e):
 
@@ -74,7 +97,8 @@ class   Quotation_editor(UserControl):
     # get all the product_quotations from the column
     product_quotations = [product_quotation.get_data() for product_quotation in self.products_quotations.current.controls]	
 
-    print(*[str(pq) for pq in product_quotations],sep="\n")
+    print("product_quotations")
+    print(product_quotations)
     # todo: save the quotation in excel
 
     # set the save_quotation to a loading comoonent
@@ -119,11 +143,14 @@ class   Quotation_editor(UserControl):
           Text(f"Total: {put_points(self.quotation_price * 1000)}",size=20),
           IconButton(icon_color="black",bgcolor=colors.GREY_100,icon=icons.ADD,on_click=self.add_product_quotation),
           ElevatedButton("Save",on_click=self.save_quotation), 
+          ElevatedButton("cancel",on_click= lambda e: self.page.go("/")), 
+
         ],
         horizontal_alignment="center",
         height=50,
         width=float("inf"),
-        ref=self.main_column_ref
+        spacing=2
+        ,ref=self.main_column_ref
       ),
       bgcolor=colors.GREY_900,
       height=self.page.height-bottom_padding,

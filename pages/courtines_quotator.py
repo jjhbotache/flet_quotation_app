@@ -3,18 +3,40 @@ from data.quotations_provider import get_quotations
 from components.quotation_card import Quotation_card  
 from components.menu import Menu
 from constants.style_cosntants import bottom_padding
+from threading import Thread
+import time
 
 class Courtines_quotator(UserControl):
   def __init__(self,page):
     super().__init__()
     self.page = page
+    # self.quotations = []
     self.quotations = get_quotations()
-    self.quotations_to_render = self.quotations
-    self.quotations_column = Column(
-                    [Quotation_card(self.page,quotation_obj) for quotation_obj in self.quotations_to_render]
-                    ,scroll=ScrollMode.ADAPTIVE,width=float("inf"),horizontal_alignment="center"
-                  )
 
+    self.columnRef = Ref[Column]()
+
+
+    self.quotations_to_render = self.quotations
+    self.quotations_column = Column(width=float("inf"),scroll=ScrollMode.ADAPTIVE,horizontal_alignment="center")
+    self.quotations_column.controls = [Quotation_card(self.page,quotation) for quotation in self.quotations_to_render]
+
+    
+    def render_quotations():
+      time.sleep(2)
+      self.columnRef.current.controls = [
+        Text("No quotations found",color="red",size=30,text_align="center",expand=True)
+      ]
+      self.columnRef.current.update()
+      print("rendering quotations")
+      # self.quotations = get_quotations()
+      # self.quotations_column.controls = [
+      #   Quotation_card(self.page,quotation) for quotation in self.quotations_to_render
+      #   ]
+      # self.quotations_column.update()
+      # self.update()
+      pass
+
+    Thread(target=lambda:render_quotations()).start()
   
   def build(self):
 
@@ -34,7 +56,8 @@ class Courtines_quotator(UserControl):
 
       e.control.update()
       self.quotations_column.controls = quotations_to_render
-      self.quotations_column.update()
+      # self.quotations_column.update()
+      self.update()
 
 
 
@@ -52,6 +75,7 @@ class Courtines_quotator(UserControl):
                   self.quotations_column,
                   bgcolor="grey800",
                   expand=True,
+                  ref= self.columnRef
                 ),
               ],
               height=total_height,

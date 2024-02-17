@@ -14,7 +14,7 @@ def main(page = Page):
     troute = TemplateRoute(page.route)
 
     page.views.clear()
-    page.views.append(View("/",[Courtines_quotator(page)]))
+    
     # for each route in routes, check if the route is the same as the current route
     # if it is, then add the view to the page views
     if troute.match("/details/new"): 
@@ -24,11 +24,11 @@ def main(page = Page):
     elif troute.match("/products"):
       page.views.append(View("/products",[Products_manager(page)]))
     elif troute.match("/products/new"):
-      page.views.append(View("/products",[Products_manager(page)]))
       page.views.append(View("/products/new",[Products_manager(page, new=True)]))
     elif troute.match("/products/edit/:product_id"):
-      page.views.append(View("/products",[Products_manager(page)]))
       page.views.append(View("/products/edit/:product_id",[Products_manager(page, product_id=int(troute.product_id))]))
+    else:
+      page.views.append(View("/",[Courtines_quotator(page)]))
 
   def view_pop(view):
         page.views.pop()

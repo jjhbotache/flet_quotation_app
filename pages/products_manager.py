@@ -3,12 +3,20 @@ from components.menu import Menu
 from constants.style_cosntants import bottom_padding
 from data.products_provider import get_products
 from components.product_component import Product_component
+from threading import Thread
 
 class Products_manager(UserControl):
   def __init__(self,page, **kwargs):
     super().__init__()
     self.page = page
+    self.products = []
+
+
+    # self.products = []
     self.products = get_products()
+
+    
+
     try: self.product_id = kwargs["product_id"]
     except: self.product_id = None
     try: self.new = kwargs["new"]
