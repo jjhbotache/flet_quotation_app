@@ -3,7 +3,7 @@ from data.products_provider import get_products
 from classes.product_quotation_class import Product_quotation_class
 class Product_quotation_component(UserControl):
   # def __init__(self,id_product=None,amount=1):
-  def __init__(self,id_pq=None,products=get_products(),product_quotation=None,on_delete_product_quotation=None):
+  def __init__(self,id_pq=None,products=get_products(),product_quotation=None,on_delete_product_quotation=None,on_change=None):
     super().__init__()
     self.id_product_quotation =product_quotation.id_product if product_quotation != None else id_pq
     self.amount = product_quotation.amount if product_quotation != None else 1
@@ -13,6 +13,7 @@ class Product_quotation_component(UserControl):
     self.amount_component_ref = Ref[TextField]()
 
     self.delete_product_quotation = on_delete_product_quotation
+    self.on_change = on_change
 
     if self.id_product_quotation != None and id_pq == None:
       self.current_product = list(filter(lambda p: p.id_product == self.id_product_quotation,self.products))[0]
@@ -22,9 +23,15 @@ class Product_quotation_component(UserControl):
   def product_changed(self,e):
     amount_field = self.amount_component_ref.current
     product = list(filter(lambda p: p.name == e.control.value,self.products))[0]
-    self.id_product_quotation = product.id_product
+    self.current_product = list(filter(
+      lambda p: p.name == e.control.value,
+      self.products
+    ))[0]
     amount_field.label = product.unit
     amount_field.update()
+    if self.on_change != None: self.on_change(self.get_data())
+
+
 
   def amount_changed(self,add_or_remove=0):
     amount_field = self.amount_component_ref.current
@@ -39,9 +46,13 @@ class Product_quotation_component(UserControl):
     else:
       self.amount += add_or_remove
       amount_field.value = self.amount
-      
+    
+    if self.amount < 0:
+      self.amount = 1
+      amount_field.value = self.amount  
 
     amount_field.update()
+    if self.on_change != None: self.on_change(self.get_data())
 
   def get_data(self):
     return Product_quotation_class(

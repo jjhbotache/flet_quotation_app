@@ -15,6 +15,7 @@ class   Quotation_editor(UserControl):
     self.quotation_id = quotation_id
     self.products_quotations = Ref[Column]()
     self.main_column_ref = Ref[Column]()
+    self.totalRef = Ref[Text]()
 
     self.products_quotations_components = []
 
@@ -61,10 +62,13 @@ class   Quotation_editor(UserControl):
     component = Product_quotation_component(
       products=self.products,
       on_delete_product_quotation=lambda _:self.delete_product_quotation(new_component_id),
-      id_pq=str(new_component_id)
+      id_pq=str(new_component_id),
+      on_change=lambda _:self.update_total()
     )
     product_quotations_column.controls.append(component)
-    product_quotations_column.update()
+    self.update()
+    self.update_total()
+
 
   def delete_product_quotation(self,id_pq):
     print("delete_product_quotation id:",id_pq)
@@ -77,6 +81,7 @@ class   Quotation_editor(UserControl):
 
     self.products_quotations.current.controls = new_controls  
     self.update()
+    self.update_total()
 
   def save_quotation(self,e):
 
@@ -120,9 +125,16 @@ class   Quotation_editor(UserControl):
     self.main_column_ref.current.controls[-1] = ElevatedButton("Save",on_click=self.save_quotation)
     self.main_column_ref.current.update()
 
+  def update_total(self):
+    prices = []
+    for pq in [pq for pq in self.products_quotations.current.controls if pq.current_product != None]:
+      prices.append(pq.amount * pq.current_product.price)
+    total = sum(prices)
+
+    self.totalRef.current.value = f"Total: {put_points(total)}"
+    self.update()
+
   def build(self):
-
-
     return SafeArea(
       Container(
       Column(
@@ -140,7 +152,7 @@ class   Quotation_editor(UserControl):
           ),
           bgcolor=colors.GREY_800,
           ),
-          Text(f"Total: {put_points(self.quotation_price * 1000)}",size=20),
+          Text(f"Total: {put_points(self.quotation_price * 1000)}",size=20,ref=self.totalRef),
           IconButton(icon_color="black",bgcolor=colors.GREY_100,icon=icons.ADD,on_click=self.add_product_quotation),
           ElevatedButton("Save",on_click=self.save_quotation), 
           ElevatedButton("cancel",on_click= lambda e: self.page.go("/")), 
