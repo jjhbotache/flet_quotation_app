@@ -14,29 +14,20 @@ def get_quotations():
     #     for i in range(len(letters))
     # ]
 
-    products = get_products()
     products_quotations = get_products_quotations()
     quotation_product_quotations = get_quotation_product_quotations()
+    print("products_quotations",[pq.__dict__ for pq in products_quotations])
 
-    # try:
     real_data = get_quotations_gspread()
-    print("real_data")
-    print(real_data)
     real_data  = [
         Quotation_class(
             name=q["name"],
             quotation_id=q["id_quotation"],
-            products_objs=products,
             product_quotations_objs=products_quotations,
             quotation_product_quotations_objs=quotation_product_quotations
         )
         for q in real_data
     ]
     data_to_return = real_data
-    # except Exception as e:
-    #     print("Error in get_quotations provider:")
-    #     print(e)
-    #     # data_to_return = test_data
-    #     data_to_return = []
 
     return data_to_return

@@ -1,15 +1,16 @@
 from flet import *
 from data.quotations_provider import get_quotations
+from data.products_provider import get_products
+from data.gspread_provider import delete_product_quotation,create_quotation,create_a_product_quotation
+
 from components.product_quotation_component import Product_quotation_component
 from classes.product_quotation_class import Product_quotation_class
-from data.products_provider import get_products
 from functions.string_functions import put_points
 from constants.style_cosntants import bottom_padding
-from data.gspread_provider import delete_product_quotation
 import random,time
 
-class   Quotation_editor(UserControl):
-  def __init__(self,page,quotation_id=None):
+class Quotation_editor(UserControl):
+  def __init__(self,page,quotation_id=None,products=get_products(),quotations=get_quotations()):
     super().__init__()
     self.page = page
     self.quotation_id = quotation_id
@@ -23,26 +24,34 @@ class   Quotation_editor(UserControl):
     self.quotation_name = ""
     self.quotation_price = 0
     self.list_of_product_quotation_ids = set()
-    self.products = get_products()
-
+    self.products = products
     
     if self.quotation_id != None:
       # bring the quotation 
-      quotations = get_quotations()
       # get the quotation by id
-      self.quotation = next((quotation for quotation in quotations if quotation.quotation_id == self.quotation_id),None)
+      self.quotation = next(
+        (quotation for quotation in quotations if quotation.quotation_id == self.quotation_id)
+        ,None
+      )
+      print("quotation",self.quotation.__dict__)
       self.quotation_name = self.quotation.name
       self.quotation_price = self.quotation.price
 
-      print(self.quotation.__dict__)
       def delete_pq(id_product_quotation):
         delete_product_quotation(id_product_quotation)
         self.products_quotations.current.controls = [pq for pq in self.products_quotations.current.controls if pq.id_product_quotation != id_product_quotation]
         self.products_quotations.current.update()
 
       self.products_quotations_components = [
-          Product_quotation_component(pq,lambda _: delete_pq(pq.id_product_quotation) ) for pq in self.quotation.products_quotations
+          Product_quotation_component(
+            product_quotation=pq,
+            on_delete_product_quotation=lambda _: delete_pq(pq.id_product_quotation),
+            products=self.products,
+          )
+          for pq in self.quotation.products_quotations
       ]
+      print("p quotations ==============================",self.quotation.products_quotations)
+      
 
   def add_product_quotation(self,e):
     product_quotations_column = self.products_quotations.current
@@ -69,7 +78,6 @@ class   Quotation_editor(UserControl):
     self.update()
     self.update_total()
 
-
   def delete_product_quotation(self,id_pq):
     print("delete_product_quotation id:",id_pq)
     print("from pq:",[pq.id_product_quotation for pq in self.products_quotations.current.controls])
@@ -84,8 +92,11 @@ class   Quotation_editor(UserControl):
     self.update_total()
 
   def save_quotation(self,e):
-
-    if any([pq.id_product_quotation == None for pq in self.products_quotations.current.controls]):
+    print("saving quotation")
+    
+    pq_components = self.products_quotations.current.controls
+    print(pq_components)
+    if any([pq.current_product == None  for pq in pq_components]):
       dialog = AlertDialog(
         title=Text("Ups..."),
         content=Text("You must select a product for each product quotation"),
@@ -94,16 +105,20 @@ class   Quotation_editor(UserControl):
       dialog.open = True
       self.page.update()
       return
-
-    # if it's empty, redirect to the home
-    if len(self.products_quotations.current.controls) == 0:
-      self.page.go("/")
+    if self.quotation_name == "":
+      dialog = AlertDialog(
+        title=Text("Ups..."),
+        content=Text("You must enter a name for the quotation"),
+      )
+      self.page.dialog = dialog
+      dialog.open = True
+      self.page.update()
       return
     # get all the product_quotations from the column
     product_quotations = [product_quotation.get_data() for product_quotation in self.products_quotations.current.controls]	
 
-    print("product_quotations")
-    print(product_quotations)
+    print("product_quotations","="*20)
+    print([pq.__dict__ for pq in product_quotations]) #list of product_quotations classes
     # todo: save the quotation in excel
 
     # set the save_quotation to a loading comoonent
@@ -111,8 +126,19 @@ class   Quotation_editor(UserControl):
     self.main_column_ref.current.update()
 
     # simulate a delay
-    time.sleep(2)
+    # time.sleep(2)
+    if self.quotation_id != None:
+      # update the quotation
+      print("updating")
+    else:
+      # add a new quotation
+      print("creating new quotation")
+      create_quotation(
+        quotation_name=self.quotation_name,
+        list_of_product_quotations_dicts=[pq.__dict__ for pq in product_quotations]
+      )
 
+    # return
     success = True
     if success: dialog = AlertDialog(title=Text("Success"),content=Text("The quotation was saved successfully"),on_dismiss=lambda e: self.page.go("/"))
     else: dialog = AlertDialog(title=Text("Ups..."),content=Text("There was an error saving the quotation"),)
@@ -139,7 +165,11 @@ class   Quotation_editor(UserControl):
       Container(
       Column(
         [
-          TextField(value=self.quotation_name,hint_text="Quotation name"),
+          TextField(
+            value=self.quotation_name,
+            on_change=lambda e: setattr(self,"quotation_name",e.control.value),
+            hint_text="Quotation name",
+            ),
           Container(
           Column(
           controls=self.products_quotations_components,

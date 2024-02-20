@@ -4,6 +4,8 @@ from components.quotation_card import Quotation_card
 from components.menu import Menu
 from constants.style_cosntants import bottom_padding
 from threading import Thread
+from data.gspread_provider import delete_quotation as delete_quotation_gspread
+from data.gspread_provider import get_quotation_product_quotations
 import time
 
 class Courtines_quotator(UserControl):
@@ -11,6 +13,7 @@ class Courtines_quotator(UserControl):
     super().__init__()
     self.page = page
     # self.quotations = []
+    print("getting quotations in courtines_quotator...")
     self.quotations = get_quotations()
 
     self.columnRef = Ref[Column]()
@@ -18,26 +21,22 @@ class Courtines_quotator(UserControl):
 
     self.quotations_to_render = self.quotations
     self.quotations_column = Column(width=float("inf"),scroll=ScrollMode.ADAPTIVE,horizontal_alignment="center")
-    self.quotations_column.controls = [Quotation_card(self.page,quotation) for quotation in self.quotations_to_render]
+
+
+    self.quotations_column.controls = [
+      Quotation_card(
+        self.page,quotation,
+        self.on_delete
+        ) 
+      for quotation in self.quotations_to_render]
 
     
-    def render_quotations():
-      time.sleep(2)
-      self.columnRef.current.controls = [
-        Text("No quotations found",color="red",size=30,text_align="center",expand=True)
-      ]
-      self.columnRef.current.update()
-      print("rendering quotations")
-      # self.quotations = get_quotations()
-      # self.quotations_column.controls = [
-      #   Quotation_card(self.page,quotation) for quotation in self.quotations_to_render
-      #   ]
-      # self.quotations_column.update()
-      # self.update()
-      pass
-
-    Thread(target=lambda:render_quotations()).start()
   
+  def on_delete(self,quotation):
+    delete_quotation_gspread(id_quotation_to_del=quotation.quotation_id)
+    self.page.update()
+    self.page.go("/")
+
   def build(self):
 
     def filter_quotations(e):
