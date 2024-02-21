@@ -44,6 +44,7 @@ class Quotation_editor(UserControl):
 
       self.products_quotations_components = [
           Product_quotation_component(
+            id_pq=pq.id_product_quotation,
             product_quotation=pq,
             on_delete_product_quotation=lambda _: delete_pq(pq.id_product_quotation),
             products=self.products,
@@ -95,7 +96,6 @@ class Quotation_editor(UserControl):
     print("saving quotation")
     
     pq_components = self.products_quotations.current.controls
-    print(pq_components)
     if any([pq.current_product == None  for pq in pq_components]):
       dialog = AlertDialog(
         title=Text("Ups..."),
@@ -130,6 +130,8 @@ class Quotation_editor(UserControl):
     if self.quotation_id != None:
       # update the quotation
       print("updating")
+      # for each product_quotation, check if it is a new one or an old one
+      return
     else:
       # add a new quotation
       print("creating new quotation")

@@ -19,8 +19,12 @@ class Product_quotation_component(UserControl):
 
     self.total = 0
 
-    if self.id_product_quotation != None and id_pq == None:
-      self.current_product = list(filter(lambda p: p.id_product == self.id_product_quotation,self.products))[0]
+    if self.id_product_quotation != None and not("N" in str(self.id_product_quotation)) :
+      print("looking for product: ",self.id_product_quotation)
+      self.current_product = list(filter(
+        lambda p: p.id_product == self.id_product_quotation,
+        self.products
+        ))[0]
 
     # print([p.name for p in self.products],sep="\n")
 
@@ -58,6 +62,7 @@ class Product_quotation_component(UserControl):
 
   def get_data(self):
     return Product_quotation_class(
+      id_product_quotation=self.id_product_quotation if self.id_product_quotation != None else "N0",
       id_product=self.current_product.id_product if self.current_product != None else 0,
       amount=self.amount
     )
